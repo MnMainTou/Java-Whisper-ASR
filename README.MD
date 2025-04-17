@@ -30,7 +30,7 @@
   Linux GLIBC x86_64/arm64 (built with debian focal, GLIBC version 2.31)
 
 ## 🚀 快速开始
-
+网盘下载：[Java-Whisper-ASR.zip](https://pan.baidu.com/s/1qTIwqeTjFP2HfTjdN7j7Vg) 提取码: dkfp
 解压下载后的包，执行以下命令
 
 ```sh
