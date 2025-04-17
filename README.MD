@@ -36,6 +36,7 @@
 ```sh
 java -jar application-2.0.0.jar --whisper.modelFile=./model/ggml-large-v3-turbo-q8_0.bin
 ```
+启动后浏览器访问：http://127.0.0.1:9999/
 
 ## 📜 许可证
 
