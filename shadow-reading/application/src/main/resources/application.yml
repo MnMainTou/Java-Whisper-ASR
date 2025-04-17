@@ -1,0 +1,118 @@
+#=================================================================================
+#==========================   spring设置  =========================================
+#=================================================================================
+
+spring:
+  profiles:
+    active:
+      - @spring.active@
+  task:
+    scheduling:
+      pool:
+        #定时任务线程池大小设置默认1设置为5
+        size: 10
+  jackson:
+    time-zone: GMT+8
+    #jackson时间格式化格式
+    date-format: yyyy-MM-dd HH:mm:ss
+  mvc:
+    format:
+      #日期格式化
+      date-time: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-request-size: 30MB
+      #文件写入磁盘的阈值,设置为0，即上传就存储在服务器,如果是100则表示小于100会存储在内存
+      file-size-threshold: 0
+      #单个文件上传的最大值
+      max-file-size: 30MB
+
+server:
+  port: 9999
+#===========================================================================
+#==========================mybatis配置=======================================
+#============================================================================
+
+mybatis-plus:
+  global-config:
+    db-config:
+      #全局主键使用雪花算法生成id
+      id-type: assign_id
+      logic-delete-field: deleteFlag
+      logic-delete-value: DELETE
+      logic-not-delete-value: NOT_DELETE
+  configuration:
+    #打印sql
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: "classpath:**/mapping/*.xml"
+
+#=============================================================================
+#======================== swagger 配置  =======================================
+#=============================================================================
+
+springdoc:
+  api-docs:
+    #是否开启文档功能关系到swagger-ui能否开启
+    enabled: true
+    #swagger后端请求地址，查看swagger所有配置，同时也是配置web端的接口配置,必须写
+    path: /v3/api-docs
+  swagger-ui:
+    #标签排序
+    tags-sorter: alpha
+    #操作排序
+    operations-sorter: alpha
+    #自定义swagger前端请求路径，输入http：127.0.0.1:8080/swagger会自动重定向到swagger页面注意是path不是url
+    path: /swagger
+  group-configs:
+    - group: System API
+      packages-to-scan:
+        - com.metal.web.controller
+
+  # knife4j的增强配置，不需要增强可以不配
+knife4j:
+  #开启访问默认路径doc.html
+  enable: true
+  setting:
+    language: zh_cn
+    #不开启缓存请求
+    enable-request-cache: false
+  #跨域请求
+  cors: true
+  #是否是生产环境，如果设置true,doc.html就不能访问
+  production: @knife4j.enable@
+
+#=============================================================================
+#======================== sa-token 配置  ======================================
+#=============================================================================
+# 相关配置去查看官网文档比这个详细
+sa-token:
+  token-name: authorization
+  # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+  timeout: 1296000
+  # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
+  active-timeout: -1
+  # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+  is-concurrent: false
+  # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
+  is-share: false
+  # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
+  token-style: uuid
+  log-level: debug
+  is-log: true
+  # 集成jwt的机密key
+  jwt-secret-key: aaaa
+
+#日志文件存储位置
+logging:
+  file:
+    path: @log.path@
+
+# 身份验证
+authorization:
+  enable: false
+
+# whisper model path
+#whisper:
+#  modelFile:
+#  modelFile: /home/metal/Desktop/project/data/whisperModel/ggml-base.en-q8_0.bin
+#  file: D:/learning/Java/语音识别/whisper/model/ggml-large-v3-turbo-q8_0.bin

@@ -1,0 +1,42 @@
+package com.metal.web.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import java.io.File;
+import java.net.URLDecoder;
+
+@Configuration
+public class ExternalStaticConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        try {
+            // 获取 JAR 文件的绝对路径
+            String jarPath = ResourceUtils.getURL(ResourceUtils.CLASSPATH_URL_PREFIX).getPath();
+            jarPath = URLDecoder.decode(jarPath, "UTF-8");
+
+            // 处理 JAR 内部路径（Windows/Linux 通用）
+            if (jarPath.contains(".jar!")) {
+                // 示例：jarPath = file:/C:/path/to/application-2.0.0.jar!/BOOT-INF/classes!/
+                String realJarPath = jarPath.replaceFirst("file:", "")
+                        .replaceFirst("!/BOOT-INF/classes!/", "")
+                        .replaceFirst("!.*", "");
+                File jarFile = new File(realJarPath);
+                jarPath = jarFile.getParentFile().getAbsolutePath();
+            }
+
+            // 拼接外部 static 目录路径
+            String externalStaticDir = jarPath + File.separator + "static" + File.separator;
+            System.out.println("External Static Directory: " + externalStaticDir);
+
+            // 映射静态资源
+            registry.addResourceHandler("/**")
+                    .addResourceLocations("file:" + externalStaticDir)
+                    .addResourceLocations("classpath:/static/");
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to configure static resources", e);
+        }
+    }
+}
